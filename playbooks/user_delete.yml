@@ -1,0 +1,38 @@
+---
+- hosts: localhost
+  become: yes
+  tasks:
+    - name: Remove janedoe
+      user:
+        name: janedoe
+        state: absent
+        remove: yes
+
+    - name: Remove anita
+      user:
+        name: anita
+        state: absent
+        remove: yes
+
+    - name: Remove developer group
+      group:
+        name: developer
+        state: absent
+
+    - name: Remove johndoe
+      user:
+        name: johndoe
+        state: absent
+        remove: yes
+
+    - name: Remove jSmith
+      user:
+        name: jSmith
+        state: absent
+        remove: yes
+
+    - name: Remove noHome
+      user:
+        name: noHome
+        state: absent
+        remove: yes

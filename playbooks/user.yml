@@ -1,0 +1,46 @@
+---
+- hosts: localhost #change to your hosts
+  become: yes
+
+  vars:
+    # NOTICE!!!:
+    # DO NOT PUT PLAIN TEXT PASSWORDS HERE!
+    # use encrypted passwords or put them in Ansible vault
+    # but this is just a demo
+    vaulted_password: mySecret.
+
+  tasks:
+    - name: Add a simple user called janedoe
+      user:
+        name: janedoe
+        comment: Jane Doe
+
+    - name: Add user anita with a password
+      user:
+        name: anita
+        password: "{{ vaulted_password | password_hash('sha512') }}"
+        update_password: on_create
+
+    - name: Add a group called developer
+      group:
+        name: developer
+        state: present
+
+    - name: Add a user johndoe and add them to a group developer
+      user:
+        name: johndoe
+        groups: developer
+        append: yes
+
+    - name: Add user jSmith and generate for them an SSH key
+      user:
+        name: jSmith
+        generate_ssh_key: yes
+        ssh_key_bits: 2048
+        ssh_key_file: .ssh/id_rsa
+
+    - name: Add user noHome with no home and set account to expire on certain date
+      user:
+        name: noHome
+        create_home: no
+        expires: 1590155615
