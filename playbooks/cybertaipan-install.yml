@@ -13,7 +13,6 @@
         path: /home/ubuntu/pysel
         state: absent
 
-    
     - name: clone scoring engine forked repo from github
       command: chdir=/home/ubuntu/ git clone https://github.com/flyingdrnick/pysel
     
@@ -29,6 +28,15 @@
         state: directory
         mode: '0755'
 
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: /cyberpatriot
+        state: directory
+        mode: '0755'
+        owner: ubuntu
+        group: ubuntu
+      become: yes
+
     - name: Creating an passwords.csv empty file
       ansible.builtin.file:
         path: "/home/ubuntu/Documents/passwords.csv"
@@ -37,28 +45,72 @@
 
     - name: copy forensic question 1
       copy:
-        src: /home/ubuntu/pysel/static/ForensicQuestion1.txt
+        src: /home/ubuntu/pysel/static/{{ item }}
         remote_src: true
-        dest: /home/ubuntu/Desktop/ForensicQuestion1.txt
+        dest: /home/ubuntu/Desktop/
+      with_items:
+        - ForensicQuestion1.txt
+        - ForensicQuestion2.txt
+        - Readme.txt
 
-    - name: copy forensic question 2
-      copy:
-        src: /home/ubuntu/pysel/static/ForensicQuestion2.txt
+    - name: copy icons
+      copy: 
+        src: /home/ubuntu/pysel/static/{{ item }} 
+        dest: /cyberpatriot/
         remote_src: true
-        dest: /home/ubuntu/Desktop/ForensicQuestion2.txt
+      with_items:
+        - cplogo.png
+        - eoclogo.jpeg
+        - gain-points.png
+        - lose-points.png
+        - gain.wav
+        - lose.wav
 
-    - name: copy competition README.txt 
-      copy:
-        src: /home/ubuntu/pysel/static/Readme.txt
-        remote_src: true
-        dest: /home/ubuntu/Desktop/Readme.txt
+    - name: obfuscate the score engine from the students
+      ansible.builtin.command: 
+        cmd: pyarmor obfuscate --recursive --output /usr/local/bin/pysel/ score.py
+      args:
+        chdir: /home/ubuntu/pysel
+      become: yes
 
-    - name: make script executable
+    - name: Change file ownership, group and permissions /usr/local/bin/
       ansible.builtin.file:
-        path: /home/ubuntu/pysel/quickinstall.sh
-        state: touch
-        mode: u=rx,g=rx,o=rx
+        path: /usr/local/bin
+        mode: '0777'
+      become: yes
 
-    - name: install scoring engine
-      command: chdir=/home/ubuntu/pysel sudo ./quickinstall.sh
-      become:
+    - name: Change file ownership, group and permissions /usr/local/bin/pysel
+      ansible.builtin.file:
+        path: /usr/local/bin/pysel
+        owner: ubuntu
+        group: ubuntu
+        recurse: yes
+      become: yes
+
+    - name: Creating a TEAM file
+      copy:
+        dest: "/usr/local/bin/pysel/TEAM"
+        content: |
+          Mensa Jnr
+
+    - name: copy service systemd
+      copy:
+        src: /home/ubuntu/pysel/static/{{ item }}
+        remote_src: true
+        dest: /etc/systemd/system
+      with_items:
+        - pysel_scoring.service
+      become: yes
+
+    - name: Enable service and ensure it is not masked
+      ansible.builtin.systemd:
+        name: pysel_scoring.service
+        enabled: yes
+        masked: no
+      become: yes
+
+    - name: Make sure a service is running
+      ansible.builtin.systemd:
+        state: started
+        name: pysel_scoring.service
+      become: yes
