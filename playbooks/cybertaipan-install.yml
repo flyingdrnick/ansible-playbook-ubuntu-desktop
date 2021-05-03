@@ -1,0 +1,42 @@
+---
+- hosts: aws #change to your hosts
+
+  vars:
+
+  tasks:
+    - name: Wait for cloud-init / user-data to finish
+      command: cloud-init status --wait
+      changed_when: false
+
+    - name: Creates directory
+      file:
+        path: /home/ubuntu/Desktop
+              /home/ubuntu/Documents
+        state: directory
+
+    - name: Creating an empty file
+      file:
+        path: "/home/ubuntu/Documents/passwords.csv"
+        state: touch
+
+    - name: copy file between directories on remote
+      copy:
+        src: /home/ubuntu/pysel/static/ForensicQuestion1.txt
+        remote_src: true
+        dest: /home/ubuntu/Desktop/ForensicQuestion1.txt
+
+    - name: copy file between directories on remote
+      copy:
+        src: /home/ubuntu/pysel/static/ForensicQuestion2.txt
+        remote_src: true
+        dest: /home/ubuntu/Desktop/ForensicQuestion2.txt
+
+    - name: copy file between directories on remote 
+      copy:
+        src: /home/ubuntu/pysel/static/Readme.txt
+        remote_src: true
+        dest: /home/ubuntu/Desktop/Readme.txt
+
+    - name: Change the working directory to somedir/ before executing the command.
+      command: chdir=/home/ubuntu/pysel sudo ./quickinstall.sh
+      become:
