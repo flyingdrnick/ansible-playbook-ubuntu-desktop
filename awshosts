@@ -1,3 +1,5 @@
 [aws]
 
-52.63.107.100 ansible_ssh_private_key_file=~/.ssh/aws20200921keypair.pem  ansible_ssh_user=ubuntu
+54.253.14.145 ansible_ssh_private_key_file=~/.ssh/aws20200921keypair.pem  ansible_ssh_user=ubuntu
+3.104.109.72 ansible_ssh_private_key_file=~/.ssh/aws20200921keypair.pem  ansible_ssh_user=ubuntu
+3.105.229.111 ansible_ssh_private_key_file=~/.ssh/aws20200921keypair.pem  ansible_ssh_user=ubuntu

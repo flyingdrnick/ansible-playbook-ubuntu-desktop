@@ -8,35 +8,57 @@
       command: cloud-init status --wait
       changed_when: false
 
-    - name: Creates directory
-      file:
-        path: /home/ubuntu/Desktop
-              /home/ubuntu/Documents
-        state: directory
+    - name: Delete scoring engine directory start clean
+      ansible.builtin.file:
+        path: /home/ubuntu/pysel
+        state: absent
 
-    - name: Creating an empty file
-      file:
+    
+    - name: clone scoring engine forked repo from github
+      command: chdir=/home/ubuntu/ git clone https://github.com/flyingdrnick/pysel
+    
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: /home/ubuntu/Desktop
+        state: directory
+        mode: '0755'
+
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: /home/ubuntu/Documents
+        state: directory
+        mode: '0755'
+
+    - name: Creating an passwords.csv empty file
+      ansible.builtin.file:
         path: "/home/ubuntu/Documents/passwords.csv"
         state: touch
+        mode: u=rw,g=r,o=r
 
-    - name: copy file between directories on remote
+    - name: copy forensic question 1
       copy:
         src: /home/ubuntu/pysel/static/ForensicQuestion1.txt
         remote_src: true
         dest: /home/ubuntu/Desktop/ForensicQuestion1.txt
 
-    - name: copy file between directories on remote
+    - name: copy forensic question 2
       copy:
         src: /home/ubuntu/pysel/static/ForensicQuestion2.txt
         remote_src: true
         dest: /home/ubuntu/Desktop/ForensicQuestion2.txt
 
-    - name: copy file between directories on remote 
+    - name: copy competition README.txt 
       copy:
         src: /home/ubuntu/pysel/static/Readme.txt
         remote_src: true
         dest: /home/ubuntu/Desktop/Readme.txt
 
-    - name: Change the working directory to somedir/ before executing the command.
+    - name: make script executable
+      ansible.builtin.file:
+        path: /home/ubuntu/pysel/quickinstall.sh
+        state: touch
+        mode: u=rx,g=rx,o=rx
+
+    - name: install scoring engine
       command: chdir=/home/ubuntu/pysel sudo ./quickinstall.sh
       become:
