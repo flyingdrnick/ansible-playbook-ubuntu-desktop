@@ -115,7 +115,7 @@ msg = Account policy has been made more secure by %PARAMETER%
 enabled = no
 tag = Unwanted Software
 pointValue = 2
-parameters = john tightvncserver netdiscover
+parameters = john transimission netdiscover
 description = Packages that are not allowed on the system
 msg = Unwanted software %PARAMETER% removed
 
