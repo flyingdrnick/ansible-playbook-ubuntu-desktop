@@ -1,0 +1,15 @@
+- hosts: aws #change to your hosts
+
+  vars:
+
+  become: yes
+  
+  tasks:
+    - name: Allow everything and enable UFW
+      ufw:
+        state: disabled
+        policy: allow
+
+    - name: Set logging
+      ufw:
+        logging: on
