@@ -1,0 +1,12 @@
+- hosts: aws #change to your hosts
+
+  vars:
+
+  become: yes
+  
+  tasks: 
+    - name: deny all access to tcp port 80
+      ufw:
+        rule: deny
+        port: 80
+        proto: tcp

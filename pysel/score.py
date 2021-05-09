@@ -224,7 +224,7 @@ description = Text you would like added to file
 msg = Rkhunter scan being run via cron
 
 [26-HttpFirewallRule:Firewall_rule_exists]
-enabled = no
+enabled = yes
 tag = Defensive Countermeasures
 pointValue = 3
 parameters = 80
