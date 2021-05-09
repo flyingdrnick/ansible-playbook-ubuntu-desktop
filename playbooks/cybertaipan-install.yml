@@ -16,6 +16,13 @@
     - name: clone scoring engine forked repo from github
       command: chdir=/home/ubuntu/ git clone https://github.com/flyingdrnick/pysel
     
+    - name: copy score.py from here to target
+      copy:
+        src: ../pysel
+        dest: /home/ubuntu
+      with_items:
+        - score.py
+
     - name: Create a directory if it does not exist
       ansible.builtin.file:
         path: /home/ubuntu/Desktop
@@ -43,7 +50,7 @@
         state: touch
         mode: u=rw,g=r,o=r
 
-    - name: copy forensic question 1
+    - name: copy forensic questions and README
       copy:
         src: /home/ubuntu/pysel/static/{{ item }}
         remote_src: true
@@ -67,8 +74,7 @@
         - lose.wav
 
     - name: obfuscate the score engine from the students
-      ansible.builtin.command: 
-        cmd: pyarmor obfuscate --recursive --output /usr/local/bin/pysel/ score.py
+      ansible.builtin.shell: /usr/local/bin/pyarmor obfuscate --recursive --output /usr/local/bin/pysel/ score.py
       args:
         chdir: /home/ubuntu/pysel
       become: yes
