@@ -112,7 +112,7 @@ description = Possible parameters: PasswordMaxDays, PasswordMinDays, PasswordWar
 msg = Account policy has been made more secure by %PARAMETER%
 
 [12-RemoveJohn:Prohibited_packages]
-enabled = no
+enabled = yes
 tag = Unwanted Software
 pointValue = 2
 parameters = john transimission netdiscover
@@ -120,7 +120,7 @@ description = Packages that are not allowed on the system
 msg = Unwanted software %PARAMETER% removed
 
 [13-ShieldsUP:Firewall_enabled]
-enabled = yes
+enabled = no
 tag = Defensive Countermeasures
 pointValue = 2
 parameters = None
@@ -144,7 +144,7 @@ description = Services that must be running
 msg = Required service %PARAMETER% is running
 
 [16-BadServiceApache2:Prohibited_services]
-enabled = no
+enabled = yes
 tag = Service Auditing
 pointValue = 4
 parameters = mysql
@@ -184,10 +184,10 @@ description = Ex: /etc
 msg = Directory permissions on /var/www/html have set
 
 [21-RemovePWFile:Bad_file]
-enabled = no
+enabled = yes
 tag = Prohibited File
 pointValue = 5
-parameters = /home/frank/Desktop/passwords.csv
+parameters = /home/ubuntu/Desktop/passwords.csv
 description = Files you want removed from the system
 msg = Plaintext password file %PARAMETER% removed
 
@@ -224,7 +224,7 @@ description = Text you would like added to file
 msg = Rkhunter scan being run via cron
 
 [26-HttpFirewallRule:Firewall_rule_exists]
-enabled = yes
+enabled = no
 tag = Defensive Countermeasures
 pointValue = 3
 parameters = 80
@@ -248,7 +248,7 @@ description = Text you would like added to file
 msg = User dennis has been denied ssh access.
 
 [29-EtcPasswdRoot:Owned_by_user]
-enabled = no
+enabled = yes
 tag = Local Policy
 pointValue = 4
 parameters = /etc/passwd:root
